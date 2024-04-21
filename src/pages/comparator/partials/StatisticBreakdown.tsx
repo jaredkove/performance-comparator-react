@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ValueChangedEvent } from "@refinitiv-ui/elements/*";
 
 import ComboBox from "../../../components/ComboBox";
+import { HeadToHeadComparison } from "../../../types/HeadToHeadComparison";
 
 interface StatisticBreakdownProps {
     run1: any,
@@ -13,53 +14,66 @@ function StatisticBreakdown(props: StatisticBreakdownProps) {
     const { run1, run2 } = props;
 
     useEffect(() => {
-        var loadedMetrics = [];
+        var loadedMetrics: HeadToHeadComparison[] = [];
         run1.metrics.forEach((metric) => {
             if (loadedMetrics[metric.name] == undefined) {
-                loadedMetrics[metric.name] = {
-                    run1Value: metric.value,
-                    run1Label: null,
-                    run1DifferencePercentage: null,
-                    run2Value: null,
-                    run2Label: null,
-                    run2DifferencePercentage: null,
-                    unit: metric.unit,
-                    lowerIsBetter: metric.lowerIsBetter
-                }
+                const newMetric = new HeadToHeadComparison();
+                newMetric.run1Value = metric.value;
+                newMetric.unit = metric.unit;
+                newMetric.lowerIsBetter = metric.lowerIsBetter;
+                loadedMetrics[metric.name] = newMetric
                 return;
             }
             console.error('IGNORING METRIC IN RUN 1 DATA, DUPLICATE DETECTED: ', metric);
         });
 
         run2.metrics.forEach((metric) => {
-            console.warn('metric:', metric);
-            if (loadedMetrics[metric.name] == undefined) {
-                loadedMetrics[metric.name] = {
-                    run2Value: metric.value,
-                    run2Label: `${metric.value}${metric.unit}`,
-                    run2DifferencePercentage: null,
-                    unit: metric.unit,
-                    lowerIsBetter: metric.lowerIsBetter
-                }
+            var newMetric = loadedMetrics[metric.name];
+            if (newMetric == undefined) {
+                newMetric = new HeadToHeadComparison();
+                newMetric.unit = metric.unit;
+                newMetric.lowerIsBetter = metric.lowerIsBetter;
+            }
+            
+            if (loadedMetrics[metric.name].run2Value == null) {
+                newMetric.run2Value = metric.value;
                 return;
-            } else if (loadedMetrics[metric.name].run2Value == null) {
-                
             }
             console.error('IGNORING METRIC IN RUN 2 DATA, DUPLICATE DETECTED: ', metric);
         });
 
+        Object.keys(loadedMetrics).forEach((key: string) => {
+            var hydratedMetric = loadedMetrics[key];
+            hydratedMetric.compare();
+            loadedMetrics[key] = hydratedMetric;
+        });
+
+        const sorted = Object.entries(loadedMetrics).sort((a, b) => {
+            if (a[1].run2DifferencePercentage == null) {
+                return -1;
+            }
+            if (a[1].lowerIsBetter) {
+                return a[1].run2DifferencePercentage < b[1].run2DifferencePercentage ? 1 : -1;
+            }
+            return a[1].run2DifferencePercentage > b[1].run2DifferencePercentage ? 1 : -1;
+        });
+
+        setMetrics(Object.fromEntries(sorted));
+
     }, [run1, run2]);
+
+    console.warn(Object.entries(metrics));
 
     return (
         <ef-tornado-chart primary={run1.name} secondary={run2.name} class="space-y-2 p-5">
-            <ef-tornado-item primary-value="35" primary-label="35%" secondary-value="65" secondary-label="65%">China</ef-tornado-item>
-            <ef-tornado-item primary-value="28" primary-label="28%" secondary-value="72" secondary-label="72%">Singapore</ef-tornado-item>
-            <ef-tornado-item primary-value="25" primary-label="25%" secondary-value="75" secondary-label="75%"
-                highlighted>Global Average</ef-tornado-item>
-            <ef-tornado-item primary-value="22" primary-label="22%" secondary-value="78" secondary-label="78%">United
-                States</ef-tornado-item>
-            <ef-tornado-item primary-value="10" primary-label="10%" secondary-value="90" secondary-label="90%">Britain</ef-tornado-item>
-            <ef-tornado-item primary-value="5" primary-label="5%" secondary-value="95" secondary-label="95%">Finland</ef-tornado-item>
+            {Object.entries(metrics).map(metric =>
+                 <ef-tornado-item 
+                    primary-value={metric[1].run1DifferencePercentage ? (metric[1].run1DifferencePercentage * 3) : (metric[1].run1Value == undefined ? 100 : 0)} 
+                    primary-label={metric[1].run1Label} 
+                    secondary-value={metric[1].run2DifferencePercentage ? (metric[1].run2DifferencePercentage * 3) : (metric[1].run2Value == undefined ? 100 : 0)} 
+                    secondary-label={metric[1].run2Label}
+                    style={metric[1].isGood ? { "--primary-color": `#6678FF`, "--secondary-color": `#6678FF` } : { "--primary-color": `#F5475B`, "--secondary-color": `#F5475B` }}>{metric[0]}</ef-tornado-item>
+            )}
             <div slot="header">
                 <h3 className="text-2xl text-left">Head to head</h3>
                 <p>Comparing the two runs directly:</p>
@@ -68,7 +82,9 @@ function StatisticBreakdown(props: StatisticBreakdownProps) {
                 <p>Source: The Varkey Foundation</p>
                 <p>*Reading to them or helping with homework</p>
             </div>
-        </ef-tornado-chart>);
+        </ef-tornado-chart>
+    )
+
 }
 
 export default StatisticBreakdown;
