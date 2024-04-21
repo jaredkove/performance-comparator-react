@@ -19,7 +19,7 @@ export class HeadToHeadComparison {
     }
 
     public get run2Label() {
-        if (!this.run1Value) {
+        if (!this.run2Value) {
             return `!! MISSING !!`
         }
         return `${this.run2Value}${this.unit}` + (this.run2DifferencePercentage ? `(${this.run2DifferencePercentage?.toFixed(2)}%)` : '');
