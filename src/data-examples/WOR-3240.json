@@ -1,0 +1,39 @@
+{
+    "name": "WOR-3240 RUN 1",
+    "environment": "QA3",
+    "release": "WOR-3240",
+    "startDate": "2018-12-28 10:00:00",
+    "endDate": "2018-12-28 14:00:00",
+    "metrics": [
+        {
+            "name": "Screening Latency",
+            "lowerIsBetter": true,
+            "value": 2490,
+            "unit": "ms"
+        },
+        {
+            "name": "Namematcher Latency",
+            "lowerIsBetter": true,
+            "value": 2290,
+            "unit": "ms"
+        },
+        {
+            "name": "fsp DB CPU",
+            "lowerIsBetter": true,
+            "value": 70,
+            "unit": "%"
+        },
+        {
+            "name": "OGS consumption rate",
+            "lowerIsBetter": false,
+            "value": 5060,
+            "unit": "/sec"
+        },
+        {
+            "name": "ES OGS Syncback consumption rate",
+            "lowerIsBetter": false,
+            "value": 200,
+            "unit": "/sec"
+        }
+    ]
+}

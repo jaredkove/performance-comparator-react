@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ef-sidebar-layout {
+  min-height: 100% !important;
+}
+/* 
+[slot="main-content"] {
+  text-align: center;
+} */
+
+#main-tab-bar {
+  min-height: calc(100vh - 56px);
+}

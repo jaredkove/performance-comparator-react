@@ -1,0 +1,33 @@
+{
+    "name": "WOR-3239 RUN 1",
+    "environment": "QA3",
+    "release": "WOR-3239",
+    "startDate": "2018-12-26 13:00:00",
+    "endDate": "2018-12-26 17:00:00",
+    "metrics": [
+        {
+            "name": "Screening Latency",
+            "lowerIsBetter": true,
+            "value": 2500,
+            "unit": "ms"
+        },
+        {
+            "name": "Namematcher Latency",
+            "lowerIsBetter": true,
+            "value": 2300,
+            "unit": "ms"
+        },
+        {
+            "name": "fsp DB CPU",
+            "lowerIsBetter": true,
+            "value": 69,
+            "unit": "%"
+        },
+        {
+            "name": "OGS consumption rate",
+            "lowerIsBetter": false,
+            "value": 5000,
+            "unit": "/sec"
+        }
+    ]
+}
