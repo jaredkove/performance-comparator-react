@@ -35,8 +35,9 @@ function StatisticBreakdown(props: StatisticBreakdownProps) {
                 newMetric.lowerIsBetter = metric.lowerIsBetter;
             }
             
-            if (loadedMetrics[metric.name].run2Value == null) {
+            if (newMetric.run2Value == null) {
                 newMetric.run2Value = metric.value;
+                loadedMetrics[metric.name] = newMetric
                 return;
             }
             console.error('IGNORING METRIC IN RUN 2 DATA, DUPLICATE DETECTED: ', metric);

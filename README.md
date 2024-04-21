@@ -1,14 +1,20 @@
-# Vite + React
+# Performance Comparator
 
-This is a [Vite](https://vitejs.dev) project together with React.
+This is an experimental React based frontend using Vite, Typescript, Tailwind CSS and the [Element Framework](https://ui.refinitiv.com/) from LSEG.
 
-[![Edit in CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/codesandbox/codesandbox-template-vite-react/main)
+The problem it tries to solve is comparing performance runs from test environments on software packages, and quickly comparing the outputs.
 
-[Configuration](https://codesandbox.io/docs/projects/learn/setting-up/tasks) `.codesandbox/tasks.json` has been added to optimize it for [CodeSandbox](https://codesandbox.io/dashboard).
+Taking data from datadog, the core of the app is the JSON files that represent an export of the data from DD. Any metric or unit can be present, with context of whether lower is better (latency, CPU usage), or whether higher is better (message consumption rates.)
 
-## Resources
+## Setup guide
 
-- [CodeSandbox — Docs](https://codesandbox.io/docs/learn)
-- [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
-- [Vite — GitHub](https://github.com/vitejs/vite)
-- [Vite — Docs](https://vitejs.dev/guide/)
+- Clone the repository
+- `cd` into the folder
+- `yarn` to install dependencies (npm should work too)
+- `yarn run dev` will start the vite build tool. You can simply press `o` to open the browser window.
+
+## Testing
+
+Inside `src/data-examples` are sample JSON files that you can import for dev use. Simple go into the import runs sidebar item and use the multiple file picker to add them into localstorage.
+
+Given the nature of this experiment - no automated tests have been created.
