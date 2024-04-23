@@ -36,7 +36,7 @@ function Comparator() {
       setSelectedEnvironment(Object.keys(runsByEnvironmentLocal)[0]);
       setRunsByEnvironment(runsByEnvironmentLocal);
     }
-  });
+  }, [selectedEnvironment]);
 
   var environmentsComboboxData = [], run1ComboboxData = [], run2ComboboxData = [];
   if (hasLoadedRuns) {
@@ -48,17 +48,13 @@ function Comparator() {
     }
   }
 
-  if(run1Name) {
-  console.warn(runsByEnvironment[selectedEnvironment][run1Name]);
-  }
-
   return (
     <div className="flex flex-col space-y-5">
         <ef-panel transparent class="flex flex-col grow p-0" spacing>
             {hasLoadedRuns.current && (
                 <ef-panel class="self-end px-4 py-2 font-black">
                     Environment: 
-                    <ComboBox className="ml-5" value={selectedEnvironment} data={environmentsComboboxData} />
+                    <ComboBox className="ml-5" value={selectedEnvironment} data={environmentsComboboxData} onChange={(e) => setSelectedEnvironment(e.detail.value)} />
                 </ef-panel>
             )}
         </ef-panel>

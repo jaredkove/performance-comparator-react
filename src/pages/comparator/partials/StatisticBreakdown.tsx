@@ -63,8 +63,6 @@ function StatisticBreakdown(props: StatisticBreakdownProps) {
 
     }, [run1, run2]);
 
-    console.warn(Object.entries(metrics));
-
     return (
         <ef-tornado-chart primary={run1.name} secondary={run2.name} class="space-y-2 p-5">
             {Object.entries(metrics).map(metric =>
